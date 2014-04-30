@@ -1,5 +1,5 @@
 {
-	"name": "concerto-comms",
+	"name": "concerto/comms",
 	"description": "Library for Inter-Process Communications using Unix domain sockets.",
 	"keywords": ["process", "pool", "ipc"],
 	"type": "library",
