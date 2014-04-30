@@ -44,7 +44,8 @@ $comms->on('message', function($message) use ($comms) {
 });
 
 $comms->listen(__DIR__ . '/test.ipc');
-$loop->run();```
+$loop->run();
+```
 
 ### Client
 
