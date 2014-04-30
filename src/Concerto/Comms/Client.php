@@ -31,6 +31,7 @@
 
 			$this->server->on('close', function() {
 				$this->server = null;
+				$this->emit('part');
 				$this->emit('parted');
 			});
 
@@ -40,6 +41,7 @@
 				$this->emit('message', [$transport->getData(), $transport]);
 			});
 
+			$this->emit('join');
 			$this->emit('joined');
 		}
 

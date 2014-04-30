@@ -32,11 +32,11 @@
 			// Create server:
 			$server = new Server($loop);
 
-			$server->on('joined', function() use ($log) {
+			$server->on('join', function() use ($log) {
 				$log->clientJoined = true;
 			});
 
-			$server->on('parted', function() use ($log) {
+			$server->on('part', function() use ($log) {
 				$log->clientParted = true;
 			});
 
@@ -48,11 +48,11 @@
 
 			$client = new Client($loop);
 
-			$client->on('joined', function() use ($log) {
+			$client->on('join', function() use ($log) {
 				$log->serverJoined = true;
 			});
 
-			$client->on('parted', function() use ($log) {
+			$client->on('part', function() use ($log) {
 				$log->serverParted = true;
 			});
 

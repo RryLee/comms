@@ -29,11 +29,11 @@ $loop = Factory::create();
 
 $comms = new Server($loop);
 
-$comms->on('joined', function() {
+$comms->on('join', function() {
 	echo "Client joined.\n";
 });
 
-$comms->on('parted', function() {
+$comms->on('part', function() {
 	echo "Client exited.\n";
 });
 
@@ -57,11 +57,11 @@ $loop = Factory::create();
 
 $comms = new Client($loop);
 
-$comms->on('joined', function() {
+$comms->on('join', function() {
 	echo "Server joined.\n";
 });
 
-$comms->on('parted', function() {
+$comms->on('part', function() {
 	echo "Server exited.\n";
 	exit;
 });

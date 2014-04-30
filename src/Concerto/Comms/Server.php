@@ -35,6 +35,7 @@
 			$this->client->on('close', function($data) {
 				$this->client = null;
 				$this->emit('parted');
+				$this->emit('part');
 			});
 
 			$this->client->on('data', function($data) {
@@ -43,6 +44,7 @@
 				$this->emit('message', [$transport->getData(), $transport]);
 			});
 
+			$this->emit('join');
 			$this->emit('joined');
 		}
 
