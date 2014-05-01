@@ -26,7 +26,6 @@
 
 		public function listen($filename) {
 			$client = stream_socket_client('unix://' . $filename);
-			//stream_set_chunk_size($client, 1);
 			stream_set_read_buffer($client, 0);
 			stream_set_write_buffer($client, 0);
 
@@ -34,6 +33,7 @@
 
 			$this->server->on('close', function() {
 				$this->server = null;
+				$this->emit('part');
 				$this->emit('parted');
 			});
 
@@ -43,6 +43,7 @@
 				$this->emit('message', [$transport->getData(), $transport]);
 			});
 
+			$this->emit('join');
 			$this->emit('joined');
 		}
 

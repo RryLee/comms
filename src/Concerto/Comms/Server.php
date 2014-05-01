@@ -28,7 +28,6 @@
 
 		public function handleConnection($socket) {
 			stream_set_blocking($socket, 0);
-			//stream_set_chunk_size($socket, 1);
 			stream_set_read_buffer($socket, 0);
 			stream_set_write_buffer($socket, 0);
 
@@ -36,16 +35,17 @@
 
 			$this->client->on('close', function($data) {
 				$this->client = null;
+				$this->emit('part');
 				$this->emit('parted');
 			});
 
 			$this->client->on('data', function($data) {
-				//var_dump($data);
 				$transport = Transport::unpack($data);
 
 				$this->emit('message', [$transport->getData(), $transport]);
 			});
 
+			$this->emit('join');
 			$this->emit('joined');
 		}
 
