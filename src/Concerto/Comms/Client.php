@@ -5,6 +5,7 @@
 	use React\EventLoop\LoopInterface;
 
 	class Client extends EventEmitter {
+		protected $filename;
 		protected $loop;
 		protected $server;
 
@@ -20,11 +21,16 @@
 			});
 		}
 
+		public function getFilename() {
+			return $this->filename;
+		}
+
 		public function hasServer() {
 			return ($this->server instanceof Connection);
 		}
 
 		public function listen($filename) {
+			$this->filename = $filename;
 			$client = stream_socket_client('unix://' . $filename);
 			stream_set_read_buffer($client, 0);
 			stream_set_write_buffer($client, 0);

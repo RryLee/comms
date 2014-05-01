@@ -7,6 +7,7 @@
 	use React\Socket\RuntimeException;
 
 	class Server extends EventEmitter {
+		protected $filename;
 		protected $client;
 		protected $loop;
 
@@ -20,6 +21,10 @@
 			$this->loop->nextTick(function() {
 				$this->client->close();
 			});
+		}
+
+		public function getFilename() {
+			return $this->filename;
 		}
 
 		public function hasClient() {
@@ -50,6 +55,8 @@
 		}
 
 		public function listen($filename) {
+			$this->filename = $filename;
+
 			if (file_exists($filename)) {
 				unlink($filename);
 			}
