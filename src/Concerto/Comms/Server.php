@@ -28,9 +28,8 @@
 		public function close() {
 			if ($this->hasClient() === false) return;
 
-			$this->loop->nextTick(function() {
-				$this->client->close();
-			});
+			$this->client->close();
+			$this->shutdown();
 		}
 
 		public function getAddress() {
@@ -49,7 +48,6 @@
 			$this->client = new Connection($socket, $this->loop);
 
 			$this->client->on('close', function($data) {
-				$this->client = null;
 				$this->emit('part');
 				$this->emit('parted');
 			});
@@ -140,7 +138,7 @@
 			fclose($this->master);
 			$this->removeAllListeners();
 
-			if (isset($this->filename) && is_file($this->filename)) {
+			if (isset($this->filename) && file_exists($this->filename)) {
 				unlink($this->filename);
 			}
 		}
