@@ -70,8 +70,8 @@
 				$loop->stop();
 			});
 
-			$server->listen(__DIR__ . '/test.ipc');
-			$client->listen(__DIR__ . '/test.ipc');
+			$server->listen('unix://test.ipc');
+			$client->listen('unix://test.ipc');
 			$loop->run();
 
 			$this->assertTrue($log->clientJoined);
