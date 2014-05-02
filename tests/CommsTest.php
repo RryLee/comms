@@ -74,6 +74,13 @@
 			$client->listen('unix://test.ipc');
 			$loop->run();
 
+			$this->assertTrue(file_exists('test.ipc'));
+
+			$client->close();
+			$server->close();
+
+			$this->assertFalse(file_exists('test.ipc'));
+
 			$this->assertTrue($log->clientJoined);
 			$this->assertTrue($log->clientParted);
 
