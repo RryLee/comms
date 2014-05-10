@@ -43,7 +43,7 @@ $comms->on('message', function($message) use ($comms) {
 	$comms->send('...');
 });
 
-$comms->listen(__DIR__ . '/test.ipc');
+$comms->listen('unix://test.ipc');
 $loop->run();
 ```
 
@@ -72,6 +72,6 @@ $comms->on('message', function($data) {
 
 $comms->send('...');
 
-$comms->listen(__DIR__ . '/test.ipc');
+$comms->listen('unix://test.ipc');
 $loop->run();
 ```

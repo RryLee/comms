@@ -3,6 +3,6 @@
 	namespace Concerto\Comms;
 	use Exception;
 
-	class AddressException extends EventEmitter {
+	class AddressException extends Exception {
 
 	}
