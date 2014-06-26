@@ -14,7 +14,7 @@
 				$this->emit('data', array($data, $this));
 			}
 
-			if ('' === $data || false === $data || feof($stream)) {
+			if ('' === $data || false === $data || !is_resource($stream) || feof($stream)) {
 				$this->end();
 			}
 		}
