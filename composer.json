@@ -1,7 +1,7 @@
 {
-	"name": "concerto/resources",
-	"description": "Library for locating and realising resource paths across multiple directories.",
-	"keywords": ["files", "directories", "resources"],
+	"name": "concerto/ComponentHandle",
+	"description": "ComponentDescription.",
+	"keywords": ["..."],
 	"type": "library",
 	"license": "MIT",
 	"authors": [

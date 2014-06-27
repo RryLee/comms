@@ -1,6 +1,6 @@
 # ComponentName Component
 
-Library for locating and realising resource paths across multiple directories.
+ComponentDescription
 
 [![Build Status](https://secure.travis-ci.org/concertophp/ComponentHandle.png?branch=master)](http://travis-ci.org/concertophp/ComponentHandle)
 
