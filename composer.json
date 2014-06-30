@@ -6,9 +6,9 @@
 	"license": "MIT",
 	"authors": [
 		{
-			"name": "Rowan Lewis",
-			"email": "rl@nbsp.io",
-			"homepage": "http://nbsp.io",
+			"name": "Your Name",
+			"email": "your@email.com",
+			"homepage": "http://yourwebsite.io",
 			"role": "Developer"
 		}
 	],
@@ -17,7 +17,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Concerto\\Resources\\": "src/"
+			"Concerto\\ComponentNamespace\\": "src/"
 		}
 	}
 }
