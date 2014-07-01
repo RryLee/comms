@@ -8,6 +8,27 @@ use React\EventLoop\LoopInterface;
 use React\Socket\ConnectionException;
 use React\Socket\RuntimeException;
 
+/**
+ *  @event error {
+ *      Triggered when a connection error occurs.
+ *
+ *      @param  RuntimeException    $error
+ *  }
+ *  @event join {
+ *      Triggered when a client connects.
+ *  }
+ *  @event part {
+ *      Triggered when a client disconnects.
+ *  }
+ *  @event message {
+ *      Triggered when a client sends a message.
+ *
+ *      @param  mixed       $data
+ *          The data recieved from the client.
+ *      @param  Transport   $transport
+ *          The transport object used to send the data.
+ *  }
+ */
 class Server extends EventEmitter
 {
     /**
@@ -15,16 +36,16 @@ class Server extends EventEmitter
      */
     protected $address;
 
-    /**
-     *  Filename of the socket (if available).
-     */
-    protected $filename;
-
     protected $client;
     protected $loop;
 
-    public function __construct(LoopInterface $loop)
+    public function __construct(LoopInterface $loop, $address)
     {
+        if (false === ($address instanceof AddressInterface)) {
+            $address = new Address($address);
+        }
+
+        $this->address = $address;
         $this->loop = $loop;
     }
 
@@ -69,9 +90,11 @@ class Server extends EventEmitter
         $this->emit('joined');
     }
 
-    public function listen($address)
+    public function listen()
     {
-        $this->setAddress($address);
+        if (isset($this->address) && $this->address->isLocalResource()) {
+            @unlink($this->address->getPath());
+        }
 
         $this->master = @stream_socket_server($this->address, $errno, $errstr);
 
@@ -95,46 +118,6 @@ class Server extends EventEmitter
         });
     }
 
-    protected function parseAddress($address)
-    {
-        $exp = new RegExp('^(?<address>(?<scheme>.+?)://(?<resource>.+))$');
-
-        return $exp->execute($address);
-    }
-
-    public function setAddress($address)
-    {
-        $data = $this->parseAddress($address);
-        $this->address = $this->filename = null;
-
-        if (false === isset($data->scheme, $data->resource)) {
-            throw new AddressException('Could not parse given address, expecting either a tcp:// or unix:// resource.');
-        }
-
-        else if ('unix' === $data->scheme) {
-            $filename = substr($address, 7);
-            $this->address = $address;
-
-            // Relative to root:
-            if (0 === strpos($filename, '/')) {
-                $this->filename = $filename;
-            }
-
-            // Relative to current path:
-            else {
-                $this->filename = getcwd() . '/' . $filename;
-            }
-        }
-
-        else if ('tcp' === $data->scheme) {
-            $this->address = $address;
-        }
-
-        else {
-            throw new AddressException('Invalid address schema, expecting either a tcp:// or unix:// resource.');
-        }
-    }
-
     public function send($message)
     {
         if ($this->hasClient() === false) return false;
@@ -150,8 +133,8 @@ class Server extends EventEmitter
         fclose($this->master);
         $this->removeAllListeners();
 
-        if (isset($this->filename) && file_exists($this->filename)) {
-            unlink($this->filename);
+        if (isset($this->address) && $this->address->isLocalResource()) {
+            @unlink($this->address->getPath());
         }
     }
 }

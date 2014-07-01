@@ -5,6 +5,22 @@ namespace Concerto\Comms;
 use Evenement\EventEmitter;
 use React\EventLoop\LoopInterface;
 
+/**
+ *  @event join {
+ *      Triggered when the client connects.
+ *  }
+ *  @event part {
+ *      Triggered when the server disconnects.
+ *  }
+ *  @event message {
+ *      Triggered when a server sends a message.
+ *
+ *      @param  mixed       $data
+ *          The data recieved from the client.
+ *      @param  Transport   $transport
+ *          The transport object used to send the data.
+ *  }
+ */
 class Client extends EventEmitter
 {
     /**
@@ -15,8 +31,13 @@ class Client extends EventEmitter
     protected $loop;
     protected $server;
 
-    public function __construct(LoopInterface $loop)
+    public function __construct(LoopInterface $loop, $address)
     {
+        if (false === ($address instanceof AddressInterface)) {
+            $address = new Address($address);
+        }
+
+        $this->address = $address;
         $this->loop = $loop;
     }
 
@@ -39,10 +60,9 @@ class Client extends EventEmitter
         return ($this->server instanceof Connection);
     }
 
-    public function listen($address)
+    public function connect()
     {
-        $this->address = $address;
-        $client = stream_socket_client($address);
+        $client = stream_socket_client($this->address);
         stream_set_read_buffer($client, 0);
         stream_set_write_buffer($client, 0);
 
