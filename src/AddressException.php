@@ -1,8 +1,9 @@
 <?php
 
-	namespace Concerto\Comms;
-	use Exception;
+namespace Concerto\Comms;
 
-	class AddressException extends Exception {
+use Exception;
 
-	}
+class AddressException extends Exception
+{
+}

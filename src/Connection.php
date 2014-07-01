@@ -1,30 +1,34 @@
 <?php
 
-	namespace Concerto\Comms;
-	use React\Stream\Stream;
-	use React\Socket\ConnectionException;
-	use React\Socket\ConnectionInterface;
-	use React\Socket\RuntimeException;
+namespace Concerto\Comms;
 
-	class Connection extends Stream {
-		public function handleData($stream) {
-			$data = fgets($stream, $this->bufferSize);
+use React\Stream\Stream;
+use React\Socket\ConnectionException;
+use React\Socket\ConnectionInterface;
+use React\Socket\RuntimeException;
 
-			if ('' !== $data && false !== $data) {
-				$this->emit('data', array($data, $this));
-			}
+class Connection extends Stream
+{
+    public function handleData($stream)
+    {
+        $data = fgets($stream, $this->bufferSize);
 
-			if ('' === $data || false === $data || !is_resource($stream) || feof($stream)) {
-				$this->end();
-			}
-		}
+        if ('' !== $data && false !== $data) {
+            $this->emit('data', array($data, $this));
+        }
 
-		public function handleClose() {
-			if (is_resource($this->stream)) {
-				// http://chat.stackoverflow.com/transcript/message/7727858#7727858
-				stream_socket_shutdown($this->stream, STREAM_SHUT_RDWR);
-				stream_set_blocking($this->stream, false);
-				fclose($this->stream);
-			}
-		}
-	}
+        if ('' === $data || false === $data || !is_resource($stream) || feof($stream)) {
+            $this->end();
+        }
+    }
+
+    public function handleClose()
+    {
+        if (is_resource($this->stream)) {
+            // http://chat.stackoverflow.com/transcript/message/7727858#7727858
+            stream_socket_shutdown($this->stream, STREAM_SHUT_RDWR);
+            stream_set_blocking($this->stream, false);
+            fclose($this->stream);
+        }
+    }
+}

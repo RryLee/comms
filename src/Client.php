@@ -1,67 +1,75 @@
 <?php
 
-	namespace Concerto\Comms;
-	use Evenement\EventEmitter;
-	use React\EventLoop\LoopInterface;
+namespace Concerto\Comms;
 
-	class Client extends EventEmitter {
-		/**
-		 * Address of the socket.
-		 */
-		protected $address;
+use Evenement\EventEmitter;
+use React\EventLoop\LoopInterface;
 
-		protected $loop;
-		protected $server;
+class Client extends EventEmitter
+{
+    /**
+     *  Address of the socket.
+     */
+    protected $address;
 
-		public function __construct(LoopInterface $loop) {
-			$this->loop = $loop;
-		}
+    protected $loop;
+    protected $server;
 
-		public function close() {
-			if ($this->hasServer() === false) return;
+    public function __construct(LoopInterface $loop)
+    {
+        $this->loop = $loop;
+    }
 
-			$this->loop->nextTick(function() {
-				$this->server->close();
-			});
-		}
+    public function close()
+    {
+        if ($this->hasServer() === false) return;
 
-		public function getAddress() {
-			return $this->address;
-		}
+        $this->loop->nextTick(function() {
+            $this->server->close();
+        });
+    }
 
-		public function hasServer() {
-			return ($this->server instanceof Connection);
-		}
+    public function getAddress()
+    {
+        return $this->address;
+    }
 
-		public function listen($address) {
-			$this->address = $address;
-			$client = stream_socket_client($address);
-			stream_set_read_buffer($client, 0);
-			stream_set_write_buffer($client, 0);
+    public function hasServer()
+    {
+        return ($this->server instanceof Connection);
+    }
 
-			$this->server = new Connection($client, $this->loop);
+    public function listen($address)
+    {
+        $this->address = $address;
+        $client = stream_socket_client($address);
+        stream_set_read_buffer($client, 0);
+        stream_set_write_buffer($client, 0);
 
-			$this->server->on('close', function() {
-				$this->server = null;
-				$this->emit('part');
-				$this->emit('parted');
-			});
+        $this->server = new Connection($client, $this->loop);
 
-			$this->server->on('data', function($data) {
-				$transport = Transport::unpack($data);
+        $this->server->on('close', function() {
+            $this->server = null;
+            $this->emit('part');
+            $this->emit('parted');
+        });
 
-				$this->emit('message', [$transport->getData(), $transport]);
-			});
+        $this->server->on('data', function($data) {
+            $transport = Transport::unpack($data);
 
-			$this->emit('join');
-			$this->emit('joined');
-		}
+            $this->emit('message', [$transport->getData(), $transport]);
+        });
 
-		public function send($message) {
-			if ($this->hasServer() === false) return false;
+        $this->emit('join');
+        $this->emit('joined');
+    }
 
-			$data = Transport::pack($message);
+    public function send($message)
+    {
+        if ($this->hasServer() === false) return false;
 
-			return $this->server->write("{$data}\n");
-		}
-	}
+        $data = Transport::pack($message);
+
+        return $this->server->write("{$data}\n");
+    }
+}

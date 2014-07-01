@@ -1,50 +1,57 @@
 <?php
 
-	namespace Concerto\Comms;
+namespace Concerto\Comms;
 
-	class Transport {
-		/**
-		 * Data being sent.
-		 */
-		protected $data;
+class Transport
+{
+    /**
+     * Data being sent.
+     */
+    protected $data;
 
-		/**
-		 * Process that transport was sent from.
-		 */
-		protected $pid;
+    /**
+     * Process that transport was sent from.
+     */
+    protected $pid;
 
-		/**
-		 * Time that transport was created.
-		 */
-		protected $time;
+    /**
+     * Time that transport was created.
+     */
+    protected $time;
 
-		static public function pack($data) {
-			$transport = new static($data);
+    static public function pack($data)
+    {
+        $transport = new static($data);
 
-			return serialize($transport);
-		}
+        return serialize($transport);
+    }
 
-		static public function unpack($data) {
-			$transport = unserialize($data);
+    static public function unpack($data)
+    {
+        $transport = unserialize($data);
 
-			return $transport;
-		}
+        return $transport;
+    }
 
-		public function __construct($data) {
-			$this->data = $data;
-			$this->pid = getmypid();
-			$this->time = microtime(true);
-		}
+    public function __construct($data)
+    {
+        $this->data = $data;
+        $this->pid = getmypid();
+        $this->time = microtime(true);
+    }
 
-		public function getData() {
-			return $this->data;
-		}
+    public function getData()
+    {
+        return $this->data;
+    }
 
-		public function getPid() {
-			return $this->pid;
-		}
+    public function getPid()
+    {
+        return $this->pid;
+    }
 
-		public function getTime() {
-			return $this->time;
-		}
-	}
+    public function getTime()
+    {
+        return $this->time;
+    }
+}
