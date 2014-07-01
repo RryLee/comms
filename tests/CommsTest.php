@@ -15,6 +15,7 @@ class CommsTest extends TestCase
 {
     public function testConnection()
     {
+        $address = 'unix://' . __DIR__ . '/test.ipc';
         $checksum = md5(uniqid(true));
         $loop = EventLoopFactory::create();
         $log = (object)[
@@ -27,7 +28,7 @@ class CommsTest extends TestCase
         ];
 
         // Create server:
-        $server = new Server($loop);
+        $server = new Server($loop, $address);
 
         $server->on('join', function() use ($log) {
             $log->clientJoined = true;
@@ -43,7 +44,7 @@ class CommsTest extends TestCase
             $server->send($checksum);
         });
 
-        $client = new Client($loop);
+        $client = new Client($loop, $address);
 
         $client->on('join', function() use ($log) {
             $log->serverJoined = true;
@@ -67,16 +68,16 @@ class CommsTest extends TestCase
             $loop->stop();
         });
 
-        $server->listen('unix://test.ipc');
-        $client->listen('unix://test.ipc');
+        $server->listen();
+        $client->connect();
         $loop->run();
 
-        $this->assertTrue(file_exists('test.ipc'));
+        $this->assertTrue(file_exists(__DIR__ . '/test.ipc'));
 
         $client->close();
         $server->close();
 
-        $this->assertFalse(file_exists('test.ipc'));
+        $this->assertFalse(file_exists(__DIR__ . '/test.ipc'));
 
         $this->assertTrue($log->clientJoined);
         $this->assertTrue($log->clientParted);
