@@ -130,8 +130,11 @@ class Server extends EventEmitter
     public function shutdown()
     {
         $this->loop->removeStream($this->master);
-        fclose($this->master);
         $this->removeAllListeners();
+
+        if (is_resource($this->master)) {
+            fclose($this->master);
+        }
 
         if (isset($this->address) && $this->address->isLocalResource()) {
             @unlink($this->address->getPath());
