@@ -14,6 +14,7 @@
 	],
 	"require": {
 		"php": ">=5.4.0",
+		"concerto/installers": "dev-master",
 		"concerto/sockets": "0.*",
 		"concerto/text-expressions": "0.*",
 		"react/event-loop": "0.4.*",
