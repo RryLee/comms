@@ -2,7 +2,7 @@
 	"name": "concerto/ComponentHandle",
 	"description": "ComponentDescription.",
 	"keywords": ["..."],
-	"type": "library",
+	"type": "concerto-component",
 	"license": "MIT",
 	"authors": [
 		{
@@ -13,7 +13,8 @@
 		}
 	],
 	"require": {
-		"php": ">=5.4.0"
+		"php": ">=5.4.0",
+		"concerto/installers": "0.*"
 	},
 	"autoload": {
 		"psr-4": {
