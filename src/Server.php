@@ -29,7 +29,7 @@ use React\Socket\RuntimeException;
  *          The transport object used to send the data.
  *  }
  */
-class Server
+class Server implements ServerInterface
 {
     use EventEmitterTrait;
 

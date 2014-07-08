@@ -21,7 +21,7 @@ use React\EventLoop\LoopInterface;
  *          The transport object used to send the data.
  *  }
  */
-class Client
+class Client implements ClientInterface
 {
     use EventEmitterTrait;
 
