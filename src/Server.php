@@ -2,7 +2,7 @@
 
 namespace Concerto\Comms;
 
-use Evenement\EventEmitter;
+use Evenement\EventEmitterTrait;
 use Concerto\TextExpressions\RegularExpression as RegExp;
 use React\EventLoop\LoopInterface;
 use React\Socket\ConnectionException;
@@ -29,8 +29,10 @@ use React\Socket\RuntimeException;
  *          The transport object used to send the data.
  *  }
  */
-class Server extends EventEmitter
+class Server
 {
+    use EventEmitterTrait;
+
     /**
      *  Address of the socket.
      */

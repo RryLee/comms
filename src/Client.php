@@ -2,7 +2,7 @@
 
 namespace Concerto\Comms;
 
-use Evenement\EventEmitter;
+use Evenement\EventEmitterTrait;
 use React\EventLoop\LoopInterface;
 
 /**
@@ -21,8 +21,10 @@ use React\EventLoop\LoopInterface;
  *          The transport object used to send the data.
  *  }
  */
-class Client extends EventEmitter
+class Client
 {
+    use EventEmitterTrait;
+
     /**
      *  Address of the socket.
      */
