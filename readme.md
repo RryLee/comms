@@ -26,7 +26,7 @@ use Concerto\Comms\Server;
 use React\EventLoop\Factory;
 
 $loop = Factory::create();
-$comms = new Server($loop, 'unix://test.ipc');
+$comms = new Server($loop, 'unix://' . __DIR__ . '/test.ipc');
 
 $comms->on('join', function() {
 	echo "Client joined.\n";
@@ -53,7 +53,7 @@ use Concerto\Comms\Client;
 use React\EventLoop\Factory;
 
 $loop = Factory::create();
-$comms = new Client($loop, 'unix://test.ipc');
+$comms = new Client($loop, 'unix://' . __DIR__ . '/test.ipc');
 
 $comms->on('join', function() {
 	echo "Server joined.\n";
