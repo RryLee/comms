@@ -26,8 +26,7 @@ use Concerto\Comms\Server;
 use React\EventLoop\Factory;
 
 $loop = Factory::create();
-
-$comms = new Server($loop);
+$comms = new Server($loop, 'unix://test.ipc');
 
 $comms->on('join', function() {
 	echo "Client joined.\n";
@@ -43,7 +42,7 @@ $comms->on('message', function($message) use ($comms) {
 	$comms->send('...');
 });
 
-$comms->listen('unix://test.ipc');
+$comms->listen();
 $loop->run();
 ```
 
@@ -54,8 +53,7 @@ use Concerto\Comms\Client;
 use React\EventLoop\Factory;
 
 $loop = Factory::create();
-
-$comms = new Client($loop);
+$comms = new Client($loop, 'unix://test.ipc');
 
 $comms->on('join', function() {
 	echo "Server joined.\n";
@@ -72,6 +70,6 @@ $comms->on('message', function($data) {
 
 $comms->send('...');
 
-$comms->listen('unix://test.ipc');
+$comms->connect();
 $loop->run();
 ```
