@@ -3,22 +3,35 @@
 namespace Concerto\Comms;
 
 use React\Stream\Stream;
-use React\Socket\ConnectionException;
-use React\Socket\ConnectionInterface;
-use React\Socket\RuntimeException;
 
 class Connection extends Stream
 {
+    public $separator = '##separator##';
+    private $message = '';
+
     public function handleData($stream)
     {
-        $data = fgets($stream, $this->bufferSize);
+        $data = stream_socket_recvfrom($stream, $this->bufferSize);
 
         if ('' !== $data && false !== $data) {
-            $this->emit('data', array($data, $this));
+            $this->handleMessage($data);
         }
 
         if ('' === $data || false === $data || !is_resource($stream) || feof($stream)) {
             $this->end();
+        }
+    }
+
+    public function handleMessage($data)
+    {
+        if (strstr($data, $this->separator)) {
+            $split = explode($this->separator, $data);
+            $message = $this->message . $split[0];
+
+            $this->emit('message', [$message]);
+            $this->message = $split[1];
+        } else {
+            $this->message .= $data;
         }
     }
 
@@ -30,5 +43,10 @@ class Connection extends Stream
             stream_set_blocking($this->stream, false);
             fclose($this->stream);
         }
+    }
+
+    public function write($data)
+    {
+        parent::write($data . $this->separator);
     }
 }

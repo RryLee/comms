@@ -76,7 +76,7 @@ class Client implements ClientInterface
             $this->emit('parted');
         });
 
-        $this->server->on('data', function($data) {
+        $this->server->on('message', function($data) {
             $transport = Transport::unpack($data);
 
             $this->emit('message', [$transport->getData(), $transport]);
@@ -88,10 +88,12 @@ class Client implements ClientInterface
 
     public function send($message)
     {
-        if ($this->hasServer() === false) return false;
+        if ($this->hasServer() === false) {
+            return false;
+        }
 
         $data = Transport::pack($message);
 
-        return $this->server->write("{$data}\n");
+        return $this->server->write($data);
     }
 }
