@@ -3,16 +3,14 @@
 namespace Concerto\Comms;
 
 use Evenement\EventEmitterTrait;
-use Concerto\TextExpressions\RegularExpression as RegExp;
 use React\EventLoop\LoopInterface;
 use React\Socket\ConnectionException;
-use React\Socket\RuntimeException;
 
 /**
  *  @event error {
  *      Triggered when a connection error occurs.
  *
- *      @param  RuntimeException    $error
+ *      @param  \RuntimeException    $error
  *  }
  *  @event join {
  *      Triggered when a client connects.
@@ -38,6 +36,7 @@ class Server implements ServerInterface
      */
     protected $address;
 
+    protected $master;
     protected $client;
     protected $loop;
 
@@ -53,7 +52,9 @@ class Server implements ServerInterface
 
     public function close()
     {
-        if ($this->hasClient() === false) return;
+        if ($this->hasClient() === false)  {
+            return;
+        }
 
         $this->client->close();
         $this->shutdown();
@@ -82,7 +83,7 @@ class Server implements ServerInterface
             $this->emit('parted');
         });
 
-        $this->client->on('data', function($data) {
+        $this->client->on('message', function($data) {
             $transport = Transport::unpack($data);
 
             $this->emit('message', [$transport->getData(), $transport]);
@@ -101,8 +102,10 @@ class Server implements ServerInterface
         $this->master = @stream_socket_server($this->address, $errno, $errstr);
 
         if (false === $this->master) {
-            $message = "Could not bind to {$this->address}: $errstr";
-            throw new ConnectionException($message, $errno);
+            throw new ConnectionException(
+                sprintf('Could not bind to %s: %s', $this->address, $errno),
+                $errno
+            );
         }
 
         stream_set_blocking($this->master, 0);
@@ -122,11 +125,13 @@ class Server implements ServerInterface
 
     public function send($message)
     {
-        if ($this->hasClient() === false) return false;
+        if ($this->hasClient() === false)  {
+            return false;
+        }
 
         $data = Transport::pack($message);
 
-        return $this->client->write("{$data}\n");
+        return $this->client->write($data);
     }
 
     public function shutdown()

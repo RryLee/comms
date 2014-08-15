@@ -1,28 +1,26 @@
 {
-	"name": "concerto/comms",
-	"description": "Library for Inter-Process Communications using Unix domain sockets.",
-	"keywords": ["process", "pool", "ipc"],
-	"type": "concerto-component",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Rowan Lewis",
-			"email": "rl@nbsp.io",
-			"homepage": "http://nbsp.io",
-			"role": "Developer"
-		}
-	],
-	"require": {
-		"php": ">=5.4.0",
-		"concerto/installers": "dev-master",
-		"concerto/sockets": "0.*",
-		"concerto/text-expressions": "0.*",
-		"react/event-loop": "0.4.*",
-		"react/socket": "0.4.*"
-	},
-	"autoload": {
-		"psr-4": {
-			"Concerto\\Comms\\": "src/"
-		}
-	}
+    "name": "concerto/comms",
+    "description": "Library for Inter-Process Communications using Unix domain sockets.",
+    "keywords": ["process", "pool", "ipc"],
+    "type": "concerto-component",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rowan Lewis",
+            "email": "rl@nbsp.io",
+            "homepage": "http://nbsp.io",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "concerto/sockets": "0.*",
+        "react/event-loop": "0.4.*",
+        "react/socket": "0.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Concerto\\Comms\\": "src/"
+        }
+    }
 }

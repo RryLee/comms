@@ -2,8 +2,4 @@
 
 namespace Concerto\Comms;
 
-use Exception;
-
-class AddressException extends Exception
-{
-}
+class AddressException extends \Exception {}

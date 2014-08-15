@@ -3,10 +3,6 @@
 namespace Concerto\Comms;
 
 use Evenement\EventEmitterTrait;
-use Concerto\TextExpressions\RegularExpression as RegExp;
-use React\EventLoop\LoopInterface;
-use React\Socket\ConnectionException;
-use React\Socket\RuntimeException;
 
 interface ServerInterface extends CommsInterface
 {

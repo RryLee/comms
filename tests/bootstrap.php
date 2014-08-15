@@ -7,8 +7,6 @@ if (is_file(__DIR__ . '/../vendor/autoload.php')) {
     foreach ($namespaces as $namespace => $dir) {
         $loader->addPsr4($namespace . 'Tests\\', __DIR__);
     }
-}
-
-else {
+} else {
     require __DIR__ . '/../../autoload.php';
 }
