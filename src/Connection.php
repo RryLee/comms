@@ -6,8 +6,8 @@ use React\Stream\Stream;
 
 class Connection extends Stream
 {
-    public $separator = '##separator##';
-    private $message = '';
+    public $separator = '#';
+    protected $message = '';
 
     public function handleData($stream)
     {
@@ -26,7 +26,7 @@ class Connection extends Stream
     {
         if (strstr($data, $this->separator)) {
             $split = explode($this->separator, $data);
-            $message = $this->message . $split[0];
+            $message = base64_decode($this->message . $split[0]);
 
             $this->emit('message', [$message]);
             $this->message = $split[1];
@@ -47,6 +47,6 @@ class Connection extends Stream
 
     public function write($data)
     {
-        parent::write($data . $this->separator);
+        parent::write(base64_encode($data) . $this->separator);
     }
 }
